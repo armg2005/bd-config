@@ -52,8 +52,6 @@ app.get("/questions", async (req, res) => {
       orderBy: { id: "asc" },
     });
 
-    // Desestruturamos para remover 'disciplina' e 'autor' com nomes em português,
-    // e recriamos o objeto com os nomes em inglês esperados pelo teste do Bruno.
     const formattedQuestions = questions.map((q) => {
       const { disciplina, autor, ...resto } = q;
       return {
