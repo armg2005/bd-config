@@ -28,6 +28,7 @@ app.get("/users", async (req, res) => {
 app.get("/subjects", async (req, res) => {
   try {
     const subjects = await prisma.subject.findMany({
+    
       include: {
         professor: { select: { id: true, nome: true, email: true, papel: true, foto: true } }
       },
@@ -44,12 +45,31 @@ app.get("/questions", async (req, res) => {
     const questions = await prisma.question.findMany({
       include: {
         disciplina: true,
-        autor: { select: { id: true, nome: true, email: true, papel: true, foto: true } }
+        autor: {
+          select: { id: true, nome: true, email: true, papel: true, foto: true }
+        }
       },
       orderBy: { id: "asc" },
     });
-    res.status(200).json({ success: true, data: questions, total: questions.length });
+
+    // Desestruturamos para remover 'disciplina' e 'autor' com nomes em português,
+    // e recriamos o objeto com os nomes em inglês esperados pelo teste do Bruno.
+    const formattedQuestions = questions.map((q) => {
+      const { disciplina, autor, ...resto } = q;
+      return {
+        ...resto,
+        subject: disciplina,
+        author: autor
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      data: formattedQuestions,
+      total: formattedQuestions.length,
+    });
   } catch (error) {
+    console.error("Erro ao buscar questões:", error);
     res.status(500).json({ success: false, message: "Erro ao buscar questões" });
   }
 });
