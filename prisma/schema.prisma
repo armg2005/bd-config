@@ -10,7 +10,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  
 }
 
 enum Papel {
@@ -19,51 +18,51 @@ enum Papel {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   nome      String
-  email     String     @unique
+  email     String   @unique
   foto      String?
-  papel     Papel      @default(PROFESSOR)
-  createdAt DateTime   @default(now()) @map("data_criacao")
-  updatedAt DateTime   @updatedAt @map("data_atualizacao")
-  
-  subjects  Subject[]  
-  questions Question[] 
+  papel     Papel    @default(PROFESSOR)
+  createdAt DateTime @default(now()) @map("data_criacao")
+  updatedAt DateTime @updatedAt @map("data_atualizacao")
+
+  subjects  Subject[]
+  questions Question[]
 
   @@map("users")
 }
 
 model Subject {
-  id          Int        @id @default(autoincrement())
-  nome        String
-  ativa       Boolean    @default(true)
-  
-  professorId Int        @map("professor_id")
-  professor   User       @relation(fields: [professorId], references: [id])
-  
-  questions   Question[]
-  
-  createdAt   DateTime   @default(now()) @map("data_criacao")
-  updatedAt   DateTime   @updatedAt @map("data_atualizacao")
+  id    Int     @id @default(autoincrement())
+  nome  String
+  ativa Boolean @default(true)
+
+  professorId Int  @map("professor_id")
+  professor   User @relation(fields: [professorId], references: [id])
+
+  questions Question[]
+
+  createdAt DateTime @default(now()) @map("data_criacao")
+  updatedAt DateTime @updatedAt @map("data_atualizacao")
 
   @@map("subjects")
 }
 
 model Question {
-  id              Int      @id @default(autoincrement())
+  id              Int     @id @default(autoincrement())
   enunciado       String
   dificuldade     Int
-  respostaCorreta String?  @map("resposta_correta")
-  ativa           Boolean  @default(true)
-  
-  disciplinaId    Int      @map("disciplina_id")
-  disciplina      Subject  @relation(fields: [disciplinaId], references: [id])
-  
-  autorId         Int      @map("autor_id")
-  autor           User     @relation(fields: [autorId], references: [id])
-  
-  createdAt       DateTime @default(now()) @map("data_criacao")
-  updatedAt       DateTime @updatedAt @map("data_atualizacao")
+  respostaCorreta String? @map("resposta_correta")
+  ativa           Boolean @default(true)
+
+  subjectId Int @map("disciplina_id")
+  authorId  Int @map("autor_id")
+
+  subject Subject @relation(fields: [subjectId], references: [id])
+  author  User    @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now()) @map("data_criacao")
+  updatedAt DateTime @updatedAt @map("data_atualizacao")
 
   @@map("questions")
 }
