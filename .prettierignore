@@ -1,0 +1,7 @@
+node_modules
+coverage
+generated
+.agents
+.claude
+.windsurf
+.git
