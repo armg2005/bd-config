@@ -326,7 +326,8 @@ export const remove = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Questão excluída com sucesso",
-    });
+      data: result.data,
+});
   } catch (error) {
     console.error("Erro ao excluir questão:", error);
 
