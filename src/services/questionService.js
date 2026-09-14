@@ -199,11 +199,13 @@ export const deleteQuestion = async (questionId) => {
     };
   }
 
-  await prisma.question.delete({
-    where: { id: questionId },
-  });
+ const deletedQuestion = await prisma.question.delete({
+  where: { id: questionId },
+  select: publicQuestionSelect,
+});
 
-  return {
-    ok: true,
-  };
+return {
+  ok: true,
+  data: deletedQuestion,
+};
 };

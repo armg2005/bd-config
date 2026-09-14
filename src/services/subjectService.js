@@ -147,12 +147,14 @@ export const deleteSubject = async (subjectId) => {
   }
 
   try {
-    await prisma.subject.delete({
-      where: { id: subjectId },
+    const deletedSubject = await prisma.subject.delete({
+        where: { id: subjectId },
+        select: publicSubjectSelect,
     });
 
     return {
       ok: true,
+      data: deletedSubject,
     };
   } catch (error) {
     if (error.code === "P2003" || error.code === "P2014") {
